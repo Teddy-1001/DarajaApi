@@ -9,6 +9,10 @@ app.use(express.json())
 
 //initiate stk--
 
+app.get('/', (req,res)=>{
+    console.log('Api working')
+})
+
 app.post('/initiate', async (req,res)=>{
     try {
         //phone number, amount, product_name
