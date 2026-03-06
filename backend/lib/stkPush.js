@@ -1,3 +1,5 @@
+import connectDB from "./db.js";
+
 const generateTimestamp =()=>{
     const date = new Date();
     const year = date.getFullYear()
@@ -47,6 +49,17 @@ export async function stkPush(accessToken, phoneNumber, amount,
         })
     
         const data = await response.json()
+
+        //database logic to update the transaction status.
+        const insertQuery = 'INSERT INTO transactions ( CheckoutRequestID ,amount, status, productName) VALUES (?,?,?,?)';
+        connectDB.query(insertQuery, [data.CheckoutRequestID, amount, 'PENDING', productName], (err)=>{
+            if(err){
+                console.error('Error creating transaction',err)
+                throw err;
+                // return res.status(500).json({ success: false, message: 'Failed to create transaction' });
+            }
+        })
+
     
         return data
     } catch (error) {
